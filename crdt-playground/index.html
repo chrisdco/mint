@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRDT Real-Time Sync</title>
+    <meta name="description" content="A decentralized, connection-agnostic text editing playground using a custom Sequence CRDT">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>CRDT Real-Time Sync</h1>
+        <p>A decentralized, connection-agnostic text editing playground using a custom Sequence CRDT</p>
+    </header>
+    <div class="split">
+        <!-- Client A -->
+        <div class="client">
+            <div class="client-header">
+                <h2>Client A</h2>
+                <label class="toggle" title="Toggle network connection">
+                    <div class="switch">
+                        <input type="checkbox" id="status-A" checked>
+                        <span class="slider"></span>
+                    </div>
+                    Online
+                </label>
+            </div>
+            <textarea id="editor-A" placeholder="Type here to sync..."></textarea>
+            
+            <div class="views">
+                <div class="log-view">
+                    <h3>Operation Log</h3>
+                    <ul id="log-A"></ul>
+                </div>
+                <div class="internal-view">
+                    <h3>Internal CRDT State</h3>
+                    <div class="internal-view-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Char</th>
+                                    <th>Fractional ID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="internal-A"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client B -->
+        <div class="client">
+            <div class="client-header">
+                <h2>Client B</h2>
+                <label class="toggle" title="Toggle network connection">
+                    <div class="switch">
+                        <input type="checkbox" id="status-B" checked>
+                        <span class="slider"></span>
+                    </div>
+                    Online
+                </label>
+            </div>
+            <textarea id="editor-B" placeholder="Type here to sync..."></textarea>
+            
+            <div class="views">
+                <div class="log-view">
+                    <h3>Operation Log</h3>
+                    <ul id="log-B"></ul>
+                </div>
+                <div class="internal-view">
+                    <h3>Internal CRDT State</h3>
+                    <div class="internal-view-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Char</th>
+                                    <th>Fractional ID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="internal-B"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="crdt.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
