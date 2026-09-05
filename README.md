@@ -1,4 +1,4 @@
-# mint — Sequence CRDT playground
+# mint 🌿 - Sequence CRDT playground
 
 Vanilla-JS, zero-dependency demo of a Logoot-inspired Sequence CRDT: two clients, offline partition simulation, op-log + fractional-ID visibility, strong eventual convergence.
 
