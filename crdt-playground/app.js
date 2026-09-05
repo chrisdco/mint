@@ -100,6 +100,7 @@ class Client {
 
         for (let i = 0; i < removed.length; i++) {
             const element = this.crdt.localDelete(start);
+            if (!element) break;
             this.sendOperation({ type: 'delete', element });
         }
         
@@ -185,4 +186,47 @@ document.addEventListener('DOMContentLoaded', () => {
    const clientB = new Client('B', sim);
    clientA.updateUI();
    clientB.updateUI();
+
+   const bar = document.getElementById('sync-bar');
+   const txt = document.getElementById('sync-text');
+   function refreshSync() {
+       const same = clientA.crdt.getText() === clientB.crdt.getText();
+       const quiet = clientA.buffer.length === 0 && clientB.buffer.length === 0;
+       const online = clientA.isOnline && clientB.isOnline;
+       const ok = same && quiet && online;
+       bar.classList.toggle('diverged', !ok);
+       txt.textContent = ok ? 'In sync — converges' : (!same ? 'Diverged — merge pending' : 'Partitioned — buffered');
+   }
+   const _origSend = Client.prototype.sendOperation;
+   const _origRecv = Client.prototype.receiveOperation;
+   Client.prototype.sendOperation = function (op) { const r = _origSend.call(this, op); setTimeout(refreshSync, 30); return r; };
+   Client.prototype.receiveOperation = function (op) { const r = _origRecv.call(this, op); setTimeout(refreshSync, 30); return r; };
+   setInterval(refreshSync, 500);
+
+   document.getElementById('reset-btn').addEventListener('click', () => {
+       for (const c of [clientA, clientB]) {
+           c.crdt.reset(); c.buffer = []; c.textarea.value = '';
+           c.logContainer.innerHTML = ''; c.updateUI();
+       }
+       sim.undelivered[clientA.id] = []; sim.undelivered[clientB.id] = [];
+       refreshSync();
+   });
+
+   // Scripted partition demo: A offline, both type, reconnect -> converge.
+   document.getElementById('demo-btn').addEventListener('click', () => {
+       const ta = clientA.textarea, tb = clientB.textarea;
+       clientA.statusToggle.checked = false;
+       clientA.statusToggle.dispatchEvent(new Event('change'));
+       const typeInto = (client, area, s) => {
+           area.focus();
+           area.value = client.crdt.getText() + s;
+           area.dispatchEvent(new Event('input', { bubbles: true }));
+       };
+       typeInto(clientA, ta, 'hello ');
+       typeInto(clientB, tb, 'world');
+       setTimeout(() => {
+           clientA.statusToggle.checked = true;
+           clientA.statusToggle.dispatchEvent(new Event('change'));
+       }, 600);
+   });
 });

@@ -1,0 +1,9 @@
+{
+  "name": "mint-crdt-playground",
+  "version": "0.2.0",
+  "description": "Logoot-inspired Sequence CRDT playground — two-client offline-capable text sync with zero dependencies",
+  "scripts": {
+    "test": "node --test tests/crdt.test.js"
+  },
+  "license": "MIT"
+}

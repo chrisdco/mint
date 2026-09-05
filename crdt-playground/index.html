@@ -12,6 +12,10 @@
     <header>
         <h1>CRDT Real-Time Sync</h1>
         <p>A decentralized, connection-agnostic text editing playground using a custom Sequence CRDT</p>
+        <div id="sync-bar"><span id="sync-dot"></span><span id="sync-text">In sync</span>
+            <button id="reset-btn" type="button">Reset</button>
+            <button id="demo-btn" type="button" title="Run offline partition demo: A offline, both type, reconnect">Run offline demo</button>
+        </div>
     </header>
     <div class="split">
         <!-- Client A -->
